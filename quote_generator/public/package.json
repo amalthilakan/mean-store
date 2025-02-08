@@ -1,0 +1,12 @@
+{
+    "name": "quote_generator",
+    "version": "1.0.0",
+    "description": "A simple quote generator",
+    "main": "index.js",
+    "scripts": {
+    "dev": "http-server ./ -o"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {}
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Simple Calculator</h2>
+        <div class="calculator">
+            <input type="number" ng-model="num1" placeholder="Enter first number">
+            
+            <select ng-model="operator">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="/">/</option>
+            </select>
+    
+            <input type="number" ng-model="num2" placeholder="Enter second number">
+            
+            <button ng-click="calculate()">Calculate</button>
+            
+            <h3>Result: {{ result }}</h3>
+        </div>
+    </div>
+    
+    <style>
+        .container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .calculator {
+            display: inline-block;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+        input, select, button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>    
+</body>
+</html>
+
