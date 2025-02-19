@@ -1,4 +1,4 @@
-angular.module('QuoteApp', ['ngRoute'])
+angular.module('StoreApp', ['ngRoute'])
 .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $locationProvider.hashPrefix('');
     $routeProvider
@@ -6,17 +6,13 @@ angular.module('QuoteApp', ['ngRoute'])
         templateUrl: 'views/home.html',
         controller: 'HomeController'
     })
-    .when('/add-quote', {
-        templateUrl: 'views/add-quote.html',
-        controller: 'AddQuoteController'
-    })
-    .when('/random-fact', { 
-        templateUrl: 'views/random-fact.html',
-        controller: 'RandomFactController'
-    })
-    .when('/pokemon-gallery', {
-        templateUrl: 'views/pokemon-gallery.html',
-        controller: 'PokemonGalleryController'
+    .when('/list', { 
+        templateUrl: 'views/list.html',  
+        controller: 'AddListController'  
+    }) 
+    .when('/gallery', {
+        templateUrl: 'views/gallery.html',
+        controller: 'GalleryController'
     })
     .when('/calculator', {
         templateUrl: "views/calculator.html",
@@ -26,9 +22,9 @@ angular.module('QuoteApp', ['ngRoute'])
         templateUrl: 'views/about.html',
         controller: 'AboutController'
     })
-    .when('/gallery', {
-        templateUrl: 'views/gallery.html',
-        controller: 'GalleryController'
+    .when("/translation", {
+        templateUrl: "views/translation.html",
+        controller: "TranslationController"
     })
     .otherwise({
         redirectTo: '/'

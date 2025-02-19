@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="QuoteApp">
+<html ng-app="StoreApp">
 <head>
     <title>Random Quote Generator</title>
     <link rel="icon" href="data:,">
@@ -15,24 +15,27 @@
     <script src="controllers/controllers.js"></script>
     <script src="controllers/calculatorController.js"></script>
     <script src="controllers/galleryController.js"></script>
+    <script src="controllers/translationController.js"></script>
+    <script src="controllers/addListController.js"></script>
 
 
     <!-- services -->
-    <script src="js/services.js"></script>
-    <script src="js/galleryService.js"></script>
     <script src="js/env.js"></script>
+    <script src="js/listService.js"></script>
+    <script src="js/galleryService.js"></script>
+    <script src="js/translationService.js"></script>
 </head>
 <body ng-controller="MainController">
     
     <nav>
         <a href="#/">Home</a>
-        <a href="#/add-quote">Add Quote</a>
+        <a href="#/list">Add List</a>
         <a href="#/gallery">Gallery</a>
         <a href="#/calculator">Calculator</a>
+        <a href="#/translation">Translation</a>
         <a href="#/about">About</a>
     </nav>
 
-    <!-- This is where different views will be injected -->
     <div ng-view ></div>
     
 </body>

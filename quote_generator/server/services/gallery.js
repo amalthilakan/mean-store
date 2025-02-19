@@ -9,51 +9,38 @@ const router = express.Router();
 // Ensure MongoDB is connected
 connectDB();
 
-// const conn = mongoose.connection; 
-// let gfs, gridfsBucket, upload;
-
-// // Wait for MongoDB connection to open before initializing GridFS
-// conn.once('open', () => {
-//     console.log('✅ MongoDB connected, initializing GridFS...');
-//     gridfsBucket = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: 'images' });
-//     gfs = gridfsBucket;
-
-//     // Initialize multer-gridfs-storage AFTER connection is ready
-//     const storage = new GridFsStorage({
-//         url: process.env.MONGO_URI, // ✅ Use connection string instead of `db`
-//         file: (req, file) => ({
-//             filename: `${Date.now()}-${file.originalname}`,
-//             bucketName: 'images'
-//         })
-//     });
-    
-
-//     upload = multer({ storage }); // ✅ Define upload here
-
-//     console.log('✅ Multer GridFS Storage initialized');
-// });
-
-const conn = mongoose.connection;
-let gfs, gridfsBucket;
+let conn = mongoose.connection;
+let gfs, gridfsBucket, upload;
 
 // ✅ Initialize multer-gridfs-storage BEFORE waiting for MongoDB connection
 const storage = new GridFsStorage({
-    url: process.env.MONGO_URI, // ✅ Use connection string instead of `db`
+    url: process.env.MONGO_URI, 
     file: (req, file) => ({
         filename: `${Date.now()}-${file.originalname}`,
         bucketName: 'images'
     })
 });
 
-const upload = multer({ storage }); // ✅ Define `upload` here, outside the connection block
-
-// Wait for MongoDB connection to open before initializing GridFS
 conn.once('open', () => {
     console.log('✅ MongoDB connected, initializing GridFS...');
     gridfsBucket = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: 'images' });
-    gfs = gridfsBucket;
 
-    console.log('✅ GridFS Initialized');
+    const storage = new GridFsStorage({
+        url: process.env.MONGO_URI,
+        file: async (req, file) => {
+            return new Promise((resolve, reject) => {
+                resolve({
+                    _id: new mongoose.Types.ObjectId(),
+                    filename: `${Date.now()}-${file.originalname}`,
+                    bucketName: 'images'
+                });
+            });
+        }
+    });
+    
+
+    upload = multer({ storage });
+    console.log('✅ Multer GridFS Storage initialized');
 });
 
 // Middleware to ensure `upload` is initialized before route execution
@@ -117,7 +104,7 @@ router.get('/:id', async (req, res) => {
             'Content-Type': file.contentType,
             'Content-Disposition': `inline; filename="${file.filename}"`,
             'Access-Control-Allow-Origin': '*',
-        });
+        }); 
 
         const readStream = gridfsBucket.openDownloadStream(file._id);
         readStream.pipe(res);

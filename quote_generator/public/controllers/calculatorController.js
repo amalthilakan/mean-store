@@ -1,23 +1,20 @@
-angular.module("QuoteApp").controller("CalculatorController", function ($scope) {
-    $scope.num1 = 0;
-    $scope.num2 = 0;
-    $scope.operator = "+";
-    $scope.result = 0;
+angular.module("StoreApp")
+.controller('CalculatorController', function($scope) {
+    $scope.display = '';
 
-    $scope.calculate = function () {
-        switch ($scope.operator) {
-            case "+":
-                $scope.result = $scope.num1 + $scope.num2;
-                break;
-            case "-":
-                $scope.result = $scope.num1 - $scope.num2;
-                break;
-            case "*":
-                $scope.result = $scope.num1 * $scope.num2;
-                break;
-            case "/":
-                $scope.result = $scope.num2 !== 0 ? $scope.num1 / $scope.num2 : "Error (div by 0)";
-                break;
+    $scope.append = function(value) {
+        $scope.display += value;
+    };
+
+    $scope.calculate = function() {
+        try {
+            $scope.display = eval($scope.display);
+        } catch (e) {
+            $scope.display = "Error";
         }
+    };
+
+    $scope.clear = function() {
+        $scope.display = '';
     };
 });

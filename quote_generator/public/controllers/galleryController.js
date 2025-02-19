@@ -1,4 +1,4 @@
-angular.module('QuoteApp')
+angular.module('StoreApp')
     .controller('GalleryController', function ($scope, GalleryService, $interval) {
         $scope.images = [];
         $scope.randomImage = {};
@@ -27,7 +27,6 @@ angular.module('QuoteApp')
 
         // Upload Image
         $scope.uploadImage = function () {
-            console.log("Upload button clicked!");
         
             var file = $scope.imageFile;
         
@@ -37,10 +36,8 @@ angular.module('QuoteApp')
                 return;
             }
         
-            console.log("File selected:", file.name);
         
             GalleryService.uploadImage(file).then(function (response) {
-                console.log("Upload successful:", response.data);
                 alert('Image Uploaded Successfully!');
                 $scope.getImages(); // Refresh image list
             }).catch(function (error) {

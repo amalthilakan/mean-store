@@ -1,12 +1,12 @@
-angular.module('QuoteApp')
-    .service('GalleryService', function ($http) {
-        var baseUrl = 'http://localhost:3000/images';
+angular.module('StoreApp')
+    .service('GalleryService', ['$http', 'API_BASE_URL', function ($http, API_BASE_URL) {
+        var baseUrl = `${API_BASE_URL}/images`;
 
         this.uploadImage = function (file) {
             var formData = new FormData();
             formData.append('image', file);
 
-            return $http.post(baseUrl + '/upload', formData, {
+            return $http.post(`${baseUrl}/upload`, formData, {
                 transformRequest: angular.identity,
                 headers: { 'Content-Type': undefined }
             });
@@ -17,6 +17,6 @@ angular.module('QuoteApp')
         };
 
         this.getImageById = function (id) {
-            return $http.get(baseUrl + '/' + id, { responseType: 'arraybuffer' }); // Get image as binary data
+            return $http.get(`${baseUrl}/${id}`, { responseType: 'arraybuffer' });
         };
-    });
+    }]);

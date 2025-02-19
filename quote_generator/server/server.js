@@ -3,8 +3,9 @@ const cors = require('cors');
 const connectDB = require('./config');
 require('dotenv').config();
 
-const quoteRoutes = require('./services/quoteRoutes');
+const listRoutes = require('./services/listRoutes');
 const galleryRoutes = require('./services/gallery');
+const translation = require('./services/translation')
 
 const app = express();
 app.use(express.json());
@@ -18,33 +19,36 @@ const allowedOrigins = [
     'http://127.0.0.1:5500'
 ];
 
+// app.use(cors({
+//     origin: function (origin, callback) {
+//         console.log(origin)
+//         if (!origin || allowedOrigins.includes(origin)) {
+//             callback(null, true);
+//         } else {
+//             console.log('Blocked by CORS:', origin);
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//     credentials: true
+// }));
+
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.log('Blocked by CORS:', origin);
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-}));
+    origin: '*'
+}))
 
 // Allow Preflight Requests for CORS
 app.options('*', cors());
-
-// app.use(cors({
-//     origin: '*'
-// }))
 
 // ✅ Connect to MongoDB
 connectDB();
 
 // ✅ Ensure Routes Are Correct
-app.use('/', quoteRoutes);
+app.use('/', listRoutes);
 app.use('/images', galleryRoutes);
+app.use('/translate', translation);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

@@ -1,4 +1,4 @@
-angular.module('QuoteApp')
+angular.module('StoreApp')
     .directive('fileModel', ['$parse', function ($parse) {
         return {
             restrict: 'A',
@@ -10,7 +10,6 @@ angular.module('QuoteApp')
                     scope.$apply(function () {
                         var file = element[0].files[0];
                         modelSetter(scope, file);
-                        console.log("File selected in directive:", file); // Debugging
                     });
                 });
             }
