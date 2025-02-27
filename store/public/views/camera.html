@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="StoreApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Capture</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .camera-container {
+            min-height: 100%;
+            background: #000;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            margin-inline: auto;
+            margin-top: 50px;
+            height: auto;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: #333;
+        }
+
+        canvas {
+            display: none;
+        }
+
+        .capture-btn {
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle, #fff 60%, #ccc 70%);
+            border: 5px solid #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .capture-btn:active {
+            transform: scale(0.95);
+        }
+
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Reduced gap for text buttons */
+            padding: 10px 0;
+            background: rgba(0, 0, 0, 0.8);
+            border-top: 1px solid #333;
+            flex-wrap: wrap; /* Allow wrapping if needed */
+        }
+
+        .filter-btn {
+            padding: 8px 12px; /* Text button padding */
+            border-radius: 5px; /* Rounded corners */
+            background: #fff;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            font-size: 14px; /* Slightly smaller text */
+            color: #333;
+            transition: background 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .filter-btn.active {
+            background: #007bff;
+            border-color: #007bff;
+            color: #fff;
+        }
+
+        .filter-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .preview-window {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            text-align: center;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow: auto;
+        }
+
+        .preview-window img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .preview-window button {
+            width: 100%;
+            max-width: 200px;
+            padding: 10px;
+            font-size: 16px;
+            color: #fff;
+            background: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .preview-window .close-btn {
+            background: #dc3545;
+        }
+
+        .preview-window .close-btn:hover {
+            background: #b02a37;
+        }
+
+        .show-preview {
+            display: block;
+        }
+    </style>
+</head>
+<body ng-controller="CameraController">
+    <div class="camera-container">
+        <h2>Camera</h2>
+        <video id="video" autoplay></video>
+        <canvas id="canvas"></canvas>
+        <div class="capture-btn" ng-click="takePhoto()"></div>
+        <div class="filter-bar">
+            <button class="filter-btn" ng-class="{ 'active': selectedFilter === 'none' }" ng-click="selectFilter('none')">None</button>
+            <button class="filter-btn" ng-class="{ 'active': selectedFilter === 'grayscale(100%)' }" ng-click="selectFilter('grayscale(100%)')">Grayscale</button>
+            <button class="filter-btn" ng-class="{ 'active': selectedFilter === 'sepia(100%)' }" ng-click="selectFilter('sepia(100%)')">Sepia</button>
+            <button class="filter-btn" ng-class="{ 'active': selectedFilter === 'invert(100%)' }" ng-click="selectFilter('invert(100%)')">Invert</button>
+            <button class="filter-btn" ng-class="{ 'active': selectedFilter === 'blur(5px)' }" ng-click="selectFilter('blur(5px)')">Blur</button>
+        </div>
+    </div>
+    
+    <div class="preview-window" id="previewWindow">
+        <img id="capturedImage" src="" alt="Captured Photo">
+        <button ng-click="savePhoto()">Save Photo</button>
+        <button class="close-btn" ng-click="closePreview()">Close</button>
+    </div>
+</body>
+</html>
