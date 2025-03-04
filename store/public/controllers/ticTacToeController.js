@@ -1,11 +1,10 @@
 angular.module('StoreApp')
     .controller('TicTacToeController', function($scope) {
-        $scope.board = Array(9).fill(null); // 3x3 grid as a 1D array
+        $scope.board = Array(9).fill(null);
         $scope.currentPlayer = 'X';
         $scope.winner = null;
         $scope.draw = false;
 
-        // Handle cell click
         $scope.makeMove = function(index) {
             if (!$scope.board[index] && !$scope.winner && !$scope.draw) {
                 $scope.board[index] = $scope.currentPlayer;

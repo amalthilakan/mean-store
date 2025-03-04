@@ -16,12 +16,11 @@ const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:5500',
     'http://127.0.0.1:8080',
-    'http://127.0.0.1:5500'
+    'http://127.0.0.1:5500',,
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        console.log(origin)
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
@@ -31,7 +30,8 @@ app.use(cors({
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    credentials: true,
+    exposedHeaders: ['Content-Disposition']
 }));
 
 // app.use(cors({
