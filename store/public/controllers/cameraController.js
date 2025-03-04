@@ -1,6 +1,5 @@
 angular.module('StoreApp')
 .controller('CameraController', function($scope, CameraService) {
-    // DOM elements
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const capturedImage = document.getElementById('capturedImage');
@@ -35,25 +34,23 @@ angular.module('StoreApp')
         ctx.filter = $scope.selectedFilter;
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     
-        const imageDataURL = canvas.toDataURL('image/png', 0.8); // 0.8 = 80% quality
+        const imageDataURL = canvas.toDataURL('image/png', 0.8);
         capturedImage.src = imageDataURL;
     
         previewWindow.classList.add('show-preview');
     };
 
     $scope.savePhoto = function() {
-        const imageData = canvas.toDataURL('image/png'); 
+        const imageData = canvas.toDataURL('image/png');
 
-        CameraService.uploadPhoto(imageData)
-            .then(response => {
-                alert("Photo saved successfully!");
-                console.log(response.data);
-                $scope.closePreview();
-            })
-            .catch(error => {
-                console.error("Error saving photo: ", error);
-                alert("Error saving photo: " + (error.message || "Unknown error"));
-            });
+        const link = document.createElement('a');
+        link.href = imageData;
+        link.download = `photo_${new Date().toISOString().replace(/[:.]/g, '-')}.png`; 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        $scope.closePreview();
     };
 
     $scope.closePreview = function() {

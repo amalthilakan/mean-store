@@ -12,10 +12,10 @@ angular.module("StoreApp", ["ngRoute"]).config([
         templateUrl: "views/list.html",
         controller: "AddListController",
       })
-      .when("/gallery", {
-        templateUrl: "views/gallery.html",
-        controller: "GalleryController",
-      })
+      // .when("/gallery", {
+      //   templateUrl: "views/gallery.html",
+      //   controller: "GalleryController",
+      // })
       .when("/calculator", {
         templateUrl: "views/calculator.html",
         controller: "CalculatorController",
@@ -31,6 +31,10 @@ angular.module("StoreApp", ["ngRoute"]).config([
       .when("/camera", {
         templateUrl: "views/camera.html",
         controller: "CameraController",
+      })
+      .when('/tictactoe', {
+        templateUrl: 'views/ticTacToe.html',
+        controller: 'TicTacToeController'
       })
       .otherwise({
         redirectTo: "/",

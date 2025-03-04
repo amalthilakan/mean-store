@@ -19,24 +19,24 @@ const allowedOrigins = [
     'http://127.0.0.1:5500'
 ];
 
-// app.use(cors({
-//     origin: function (origin, callback) {
-//         console.log(origin)
-//         if (!origin || allowedOrigins.includes(origin)) {
-//             callback(null, true);
-//         } else {
-//             console.log('Blocked by CORS:', origin);
-//             callback(new Error('Not allowed by CORS'));
-//         }
-//     },
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//     allowedHeaders: ['Content-Type', 'Authorization'],
-//     credentials: true
-// }));
-
 app.use(cors({
-    origin: '*'
-}))
+    origin: function (origin, callback) {
+        console.log(origin)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.log('Blocked by CORS:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
+// app.use(cors({
+//     origin: '*'
+// }))
 
 // Allow Preflight Requests for CORS
 app.options('*', cors());

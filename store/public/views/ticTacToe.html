@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+</head>
+<body>
+    <div class="tic-tac-toe-container">
+        <h2>Tic Tac Toe</h2>
+        <div class="game-status">
+            <p ng-if="!winner && !draw">Current Player: {{ currentPlayer }}</p>
+            <p ng-if="winner">Winner: {{ winner }}</p>
+            <p ng-if="draw">Game is a Draw!</p>
+        </div>
+        <div class="board">
+            <div class="cell" ng-repeat="cell in board track by $index" ng-click="makeMove($index)" ng-class="{ 'x': cell === 'X', 'o': cell === 'O' }">
+                {{ cell }}
+            </div>
+        </div>
+        <button ng-click="resetGame()">Reset Game</button>
+    </div>
+    
+    <style>
+        .tic-tac-toe-container {
+            background: #000;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            margin: 50px auto 0;
+            height: auto;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+    
+        h2 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+    
+        .game-status {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #fff;
+        }
+    
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+            margin: 0 auto;
+            width: 310px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+    
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            cursor: pointer;
+            border: 2px solid #333;
+            border-radius: 5px;
+        }
+    
+        .cell:hover {
+            background: #e0e0e0;
+        }
+    
+        .x {
+            color: #d9534f;
+        }
+    
+        .o {
+            color: #5bc0de;
+        }
+    
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+    
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</body>
+</html>
