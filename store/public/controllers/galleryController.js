@@ -5,7 +5,6 @@ angular.module('StoreApp')
         $scope.currentIndex = 0;
         $scope.imageFile = null;
 
-        // Custom directive to handle file input (file-model)
         angular.module('StoreApp').directive('fileModel', ['$parse', function ($parse) {
             return {
                 restrict: 'A',
@@ -34,9 +33,9 @@ angular.module('StoreApp')
             GalleryService.uploadImage($scope.imageFile)
                 .then(function (response) {
                     alert('Image Uploaded Successfully!');
-                    $scope.imageFile = null; // Reset file input
-                    document.getElementById('fileInput').value = ''; // Clear file input visually
-                    $scope.getImages(); // Reload images after upload
+                    $scope.imageFile = null; 
+                    document.getElementById('fileInput').value = ''; 
+                    $scope.getImages(); 
                 })
                 .catch(function (error) {
                     console.error('Error uploading image:', error);
@@ -85,16 +84,15 @@ angular.module('StoreApp')
 
         // Fetch a single image by ID and return Blob URL
         $scope.getImageUrl = function (id) {
-            return GalleryService.getImageUrl(id) // Renamed from getImageById for clarity
+            return GalleryService.getImageUrl(id)
                 .then(function (data) {
-                    return data; // Return the object with { url, _id }
+                    return data;
                 })
                 .catch(function (error) {
                     console.error('Error getting image URL:', error);
-                    return { url: '', _id: id }; // Fallback
+                    return { url: '', _id: id };
                 });
         };
 
-        // Load images on controller initialization
         $scope.getImages();
     });

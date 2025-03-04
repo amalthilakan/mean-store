@@ -1,32 +1,31 @@
 const express = require('express');
 const multer = require('multer');
 const { GridFsStorage } = require('multer-gridfs-storage');
-const { MongoClient, GridFSBucket } = require('mongodb'); // Import GridFSBucket explicitly
-const mongoose = require('mongoose'); // Keep mongoose for ObjectId if needed
-const connectDB = require('../config'); // Keep this if you still use mongoose elsewhere
+const { MongoClient, GridFSBucket } = require('mongodb'); 
+const mongoose = require('mongoose');
+const connectDB = require('../config'); 
 
 const router = express.Router();
 
-const url = process.env.MONGO_URI ; // Default to local MongoDB
+const url = process.env.MONGO_URI ; 
 
 let conn, db, gridfsBucket, upload;
 
-// Connect to MongoDB using MongoClient
+
 MongoClient.connect(url)
   .then((client) => {
     console.log('✅ MongoDB connected via MongoClient');
-    db = client.db('quotedb'); // Use 'insurance_app' database
+    db = client.db('quotedb');
     gridfsBucket = new GridFSBucket(db, { bucketName: 'uploads' });
 
-    // Initialize GridFsStorage for multer
     const storage = new GridFsStorage({
-      db: db, // Use the MongoDB database instance from MongoClient
+      db: db, 
       file: (req, file) => {
         return new Promise((resolve, reject) => {
           const fileInfo = {
-            _id: new mongoose.Types.ObjectId(), // Generate ObjectId for compatibility
+            _id: new mongoose.Types.ObjectId(),
             filename: `${Date.now()}-${file.originalname}`,
-            bucketName: 'uploads' // Match the GridFS bucket name
+            bucketName: 'uploads'
           };
           resolve(fileInfo);
         });
@@ -38,10 +37,9 @@ MongoClient.connect(url)
   })
   .catch((err) => {
     console.error('❌ MongoDB connection error:', err);
-    process.exit(1); // Exit if connection fails
+    process.exit(1);
   });
 
-// Middleware to ensure `upload` is initialized before route execution
 function ensureUploadReady(req, res, next) {
   if (!upload) {
     console.error('❌ File upload system not initialized');
@@ -50,7 +48,6 @@ function ensureUploadReady(req, res, next) {
   next();
 }
 
-// Upload Image
 router.post('/upload', ensureUploadReady, (req, res, next) => {
   console.log("Upload request received...");
   upload.single('image')(req, res, (err) => {
@@ -78,9 +75,9 @@ router.get('/', async (req, res) => {
     }
 
     const images = files.map(file => ({
-      _id: file._id.toString(), // Ensure _id is string for JSON response
+      _id: file._id.toString(),
       filename: file.filename,
-      url: `${req.protocol}://${req.get('host')}/images/${file._id}` // Use dynamic host
+      url: `${req.protocol}://${req.get('host')}/images/${file._id}`
     }));
 
     res.json(images);
@@ -90,10 +87,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Fetch Single Image by ID
 router.get('/:id', async (req, res) => {
   try {
-    // Validate the ObjectId format
     let objectId;
     try {
       objectId = new mongoose.Types.ObjectId(req.params.id);
@@ -109,14 +104,13 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ error: 'File not found' });
     }
 
-    // Log file details for debugging
     console.log('Found file:', file);
 
     res.set({
-      'Content-Type': file.contentType || 'application/octet-stream', // Default to octet-stream if contentType is missing
+      'Content-Type': file.contentType || 'application/octet-stream', 
       'Content-Disposition': `inline; filename="${file.filename}"`,
-      'Access-Control-Allow-Origin': 'http://localhost:3000', // Match Angular origin
-      'Access-Control-Expose-Headers': 'Content-Disposition', // Expose headers for binary responses
+      'Access-Control-Allow-Origin': 'http://localhost:3000',
+      'Access-Control-Expose-Headers': 'Content-Disposition',
     }); 
 
     const readStream = gridfsBucket.openDownloadStream(objectId);

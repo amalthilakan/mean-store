@@ -4,8 +4,8 @@ const connectDB = require('./config');
 require('dotenv').config();
 
 const listRoutes = require('./services/listRoutes');
-const galleryRoutes = require('./services/gallery');
 const translation = require('./services/translation')
+// const galleryRoutes = require('./services/gallery');
 
 const app = express();
 app.use(express.json());
@@ -31,12 +31,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-    exposedHeaders: ['Content-Disposition']
 }));
-
-// app.use(cors({
-//     origin: '*'
-// }))
 
 // Allow Preflight Requests for CORS
 app.options('*', cors());
@@ -46,9 +41,9 @@ connectDB();
 
 // ✅ Ensure Routes Are Correct
 app.use('/', listRoutes);
-app.use('/images', galleryRoutes);
 app.use('/translate', translation);
 
+// app.use('/images', galleryRoutes);s
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
